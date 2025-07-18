@@ -94,19 +94,21 @@ def hangman(secret, guess):
 
 # Task 10: Pig Latin, Another String Manipulation Exercise
 def pig_latin(text):
+    vowels = "aeiou"
     words = text.split()
     result = []
-    vowels = "aeiou"
-    
+
     for word in words:
-        if word[:2] == "qu":
-            result.append(word[2:] + "quay")
-        elif word[0] in vowels:
+        if word[0] in vowels:
             result.append(word + "ay")
         else:
-            for i, char in enumerate(word):
-                if char in vowels:
-                    result.append(word[i:] + word[:i] + "ay")
+            for i in range(len(word)):
+                if word[i] in vowels:
+                    
+                    if word[i] == "u" and i > 0 and word[i - 1] == "q":
+                        result.append(word[i + 1:] + word[:i + 1] + "ay")
+                    else:
+                        result.append(word[i:] + word[:i] + "ay")
                     break
-    
     return " ".join(result)
+
