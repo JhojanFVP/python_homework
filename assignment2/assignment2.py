@@ -86,14 +86,24 @@ def _read_csv(path):
         with open(path, newline='') as f:
             reader = csv.reader(f)
             for i, row in enumerate(reader):
-                if i == 0: d['fields'] = row
-                else: d['rows'].append(tuple(row))
+                if i == 0:
+                    d['fields'] = row
+                else:
+                    d['rows'].append(tuple(row))  # convert row to tuple
     except Exception as e:
         raise e
     return d
 
-minutes1, minutes2 = _read_csv('../csv/minutes1.csv'), _read_csv('../csv/minutes2.csv')
-print(minutes1, minutes2)
+def read_minutes():
+    minutes1 = _read_csv('../csv/minutes1.csv')
+    minutes2 = _read_csv('../csv/minutes2.csv')
+    return minutes1, minutes2
+
+minutes1, minutes2 = read_minutes()
+
+print(minutes1)
+print(minutes2)
+
 
 # Task 13: create_minutes_set()
 def create_minutes_set():
