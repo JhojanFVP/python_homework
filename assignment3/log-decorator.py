@@ -1,18 +1,30 @@
 # log-decorator.py
 import logging
+import os
 
-# Logger setup (one-time)
-logger = logging.getLogger(__name__ + "_parameter_log")
+print("Running from:", os.getcwd())
+
+logger = logging.getLogger("my_parameter_log")
 logger.setLevel(logging.INFO)
-logger.addHandler(logging.FileHandler("./decorator.log", "a"))
+
+log_path = os.path.join(os.path.dirname(__file__), "decorator.log")
+logger.addHandler(logging.FileHandler(log_path, "a"))
+
+
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+logger.addHandler(stream_handler)
 
 def logger_decorator(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
+        print("Logging:", func.__name__)  
         logger.info(f"function: {func.__name__}")
         logger.info(f"positional parameters: {args if args else 'none'}")
         logger.info(f"keyword parameters: {kwargs if kwargs else 'none'}")
         logger.info(f"return: {result}")
+        for handler in logger.handlers:
+            handler.flush()
         return result
     return wrapper
 
@@ -28,7 +40,6 @@ def accepts_args(*args):
 def keyword_only(**kwargs):
     return logger_decorator
 
-# Main test code
 if __name__ == "__main__":
     say_hello()
     accepts_args(1, 2, 3)
