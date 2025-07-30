@@ -21,7 +21,6 @@ class Vector(Point):
     def __add__(self, other):
         return Vector(self.x + other.x, self.y + other.y)
 
-<<<<<<< HEAD
 if __name__ == "__main__":
     p1 = Point(3, 4)
     p2 = Point(3, 4)
@@ -31,17 +30,3 @@ if __name__ == "__main__":
     v2 = Vector(3, 4)
     v3 = v1 + v2
     print(v3)  # Vector(4, 6)
-=======
-# Demo
-p1 = Point(1, 2)
-p2 = Point(1, 2)
-print(p1 == p2)  # True
-
-p3 = Point(0, 0)
-print(p1.distance(p3))  # Distance from p1 to origin, e.g., 2.236...
-
-v1 = Vector(1, 2)
-v2 = Vector(3, 4)
-print(v1)  # Vector(1, 2)
-print(v1 + v2)  # Vector(4, 6)
->>>>>>> 869ce2a (Complete Task 5: Extend Point to Vector with class methods and tests)
