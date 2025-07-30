@@ -1,3 +1,6 @@
+import os
+print("Running from:", os.getcwd())
+
 # log-decorator.py
 import logging
 import os
@@ -10,7 +13,7 @@ logger.setLevel(logging.INFO)
 log_path = os.path.join(os.path.dirname(__file__), "decorator.log")
 logger.addHandler(logging.FileHandler(log_path, "a"))
 
-
+# OPTIONAL: Also log to terminal
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
@@ -18,7 +21,7 @@ logger.addHandler(stream_handler)
 def logger_decorator(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
-        print("Logging:", func.__name__)  
+        print("Logging:", func.__name__)  # TEMP DEBUG
         logger.info(f"function: {func.__name__}")
         logger.info(f"positional parameters: {args if args else 'none'}")
         logger.info(f"keyword parameters: {kwargs if kwargs else 'none'}")
@@ -44,3 +47,5 @@ if __name__ == "__main__":
     say_hello()
     accepts_args(1, 2, 3)
     keyword_only(name="Jhojan", course="Python")
+
+
