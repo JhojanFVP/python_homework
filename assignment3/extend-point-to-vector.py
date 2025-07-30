@@ -21,7 +21,6 @@ class Vector(Point):
     def __add__(self, other):
         return Vector(self.x + other.x, self.y + other.y)
 
-# Test code
 if __name__ == "__main__":
     p1 = Point(3, 4)
     p2 = Point(3, 4)
