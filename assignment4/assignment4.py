@@ -30,12 +30,14 @@ csv_path = "employees.csv"
 task1_older.to_csv(csv_path, index=False)
 print(f"\n--- Task 1.4 ---\nCSV saved at {os.path.abspath(csv_path)}")
 
+
+
 # --- Task 2.1: Load from CSV ---
 task2_employees = pd.read_csv("employees.csv")
 print("\n--- Task 2.1: Loaded CSV ---")
 print(task2_employees)
 
-# --- Create additional_employees.json ---
+
 import json
 
 extra_employees = [
@@ -57,6 +59,7 @@ print("\n--- Task 2.3: Combined DataFrame ---")
 print(more_employees)
 
 
+
 # --- Task 3.1: First 3 rows ---
 first_three = more_employees.head(3)
 print("\n--- Task 3.1: First 3 Rows ---")
@@ -75,6 +78,8 @@ print(employee_shape)
 # --- Task 3.4: DataFrame info ---
 print("\n--- Task 3.4: DataFrame Info ---")
 more_employees.info()
+
+
 
 # --- Task 4.1: Load dirty data ---
 dirty_data = pd.read_csv("dirty_data.csv")
