@@ -116,22 +116,20 @@ print(clean_data)
 # --- Task 4.7: Convert Hire Date to datetime ---
 
 
-# Save original Hire Date strings for reference
 original_hire_dates = clean_data["Hire Date"].copy()
 
-# Strip whitespace from the Hire Date strings (original)
+
 clean_data["Hire Date"] = clean_data["Hire Date"].str.strip()
 
-# First attempt to parse dates flexibly
+
 clean_data["Hire Date"] = pd.to_datetime(clean_data["Hire Date"], errors="coerce", infer_datetime_format=True)
 
 
-# Check which rows failed to convert (NaT)
 mask_nat = clean_data["Hire Date"].isna()
 
 if mask_nat.any():
 
-    # Try alternative formats on the original strings again (strip whitespace here too)
+  
     alt_formats = ["%m/%d/%Y", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d", "%b %d %Y", "%B %d %Y"]
     for fmt in alt_formats:
         still_nat = clean_data["Hire Date"].isna()
@@ -141,7 +139,7 @@ if mask_nat.any():
         parsed_dates = pd.to_datetime(to_parse, format=fmt, errors="coerce")
         clean_data.loc[still_nat, "Hire Date"] = parsed_dates
 
-    # Final check for any remaining NaT rows - attempt flexible parsing again
+   
     still_nat = clean_data["Hire Date"].isna()
     if still_nat.any():
         to_parse = original_hire_dates.loc[clean_data.index[still_nat]].str.strip()
@@ -158,3 +156,4 @@ clean_data["Name"] = clean_data["Name"].str.strip().str.upper()
 clean_data["Department"] = clean_data["Department"].str.strip().str.upper()
 print("\n--- Task 4.8: Standardized Name and Department ---")
 print(clean_data)
+
