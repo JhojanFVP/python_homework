@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 
+
 # --- Task 1.1: Create DataFrame ---
 data = {
     'Name': ['Alice', 'Bob', 'Charlie'],
@@ -81,6 +82,12 @@ dirty_data = pd.read_csv("dirty_data.csv")
 print("\n--- Task 4.1: Dirty Data ---")
 print(dirty_data)
 
+# Store original Hire Date strings before conversion for reference
+original_hire_dates = dirty_data["Hire Date"].copy()
+
+print("\n--- Task 4.1: Dirty Data ---")
+print(dirty_data)
+
 # --- Task 4.2: Copy to clean_data ---
 clean_data = dirty_data.copy()
 
@@ -107,9 +114,44 @@ print("\n--- Task 4.6: Filled Missing Age and Salary ---")
 print(clean_data)
 
 # --- Task 4.7: Convert Hire Date to datetime ---
-clean_data["Hire Date"] = pd.to_datetime(clean_data["Hire Date"], errors="coerce")
-print("\n--- Task 4.7: Hire Date Converted ---")
+
+
+# Save original Hire Date strings for reference
+original_hire_dates = clean_data["Hire Date"].copy()
+
+# Strip whitespace from the Hire Date strings (original)
+clean_data["Hire Date"] = clean_data["Hire Date"].str.strip()
+
+# First attempt to parse dates flexibly
+clean_data["Hire Date"] = pd.to_datetime(clean_data["Hire Date"], errors="coerce", infer_datetime_format=True)
+
+
+# Check which rows failed to convert (NaT)
+mask_nat = clean_data["Hire Date"].isna()
+
+if mask_nat.any():
+
+    # Try alternative formats on the original strings again (strip whitespace here too)
+    alt_formats = ["%m/%d/%Y", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d", "%b %d %Y", "%B %d %Y"]
+    for fmt in alt_formats:
+        still_nat = clean_data["Hire Date"].isna()
+        if not still_nat.any():
+            break
+        to_parse = original_hire_dates.loc[clean_data.index[still_nat]].str.strip()
+        parsed_dates = pd.to_datetime(to_parse, format=fmt, errors="coerce")
+        clean_data.loc[still_nat, "Hire Date"] = parsed_dates
+
+    # Final check for any remaining NaT rows - attempt flexible parsing again
+    still_nat = clean_data["Hire Date"].isna()
+    if still_nat.any():
+        to_parse = original_hire_dates.loc[clean_data.index[still_nat]].str.strip()
+        parsed_dates = pd.to_datetime(to_parse, errors="coerce")
+        clean_data.loc[still_nat, "Hire Date"] = parsed_dates
+
+print("\n--- Task 4.7: Hire Date Converted After Trying Alternative Formats ---")
 print(clean_data)
+
+
 
 # --- Task 4.8: Strip whitespace and standardize Name and Department ---
 clean_data["Name"] = clean_data["Name"].str.strip().str.upper()
